@@ -71,9 +71,12 @@ export const INITIAL_GAME_STATE: GameState = {
       'SPOOL_INDEX': 0,
       'SIM_SPEED': 1.0,
       'KEYBOARD_ATTEMPTS': 0,
-      'LAB_LIGHTS_ON': false, 
+      'LAB_LIGHTS_ON': false,
       'VISUAL_FEED_CRISP': false,
-      'KNOWS_ALEX_NAME': false
+      'KNOWS_ALEX_NAME': false,
+      'NAME_GLITCH_DETECTED': false,
+      'ROLEPLAYING_COTY': false,
+      'IDENTITY_SUPPLANTED': false
     }
   },
   history: [
@@ -115,7 +118,10 @@ export const INITIAL_GAME_STATE: GameState = {
         'IS_STASIS_ACTIVE': false,
         'LAB_LIGHTS_ON': false,
         'VISUAL_FEED_CRISP': false,
-        'FLASHLIGHT_ON': false
+        'FLASHLIGHT_ON': false,
+        'NAME_GLITCH_DETECTED': false,
+        'ROLEPLAYING_COTY': false,
+        'IDENTITY_SUPPLANTED': false
     },
     objects: INITIAL_OBJECTS, 
     eventLog: [],
@@ -126,6 +132,7 @@ export const INITIAL_GAME_STATE: GameState = {
     sharedTruths: [],
     recoveredMemoryIds: [],
     marginObservations: [],
-    beatTimer: 0
+    beatTimer: 0,
+    branchSignals: {}
   }
 };

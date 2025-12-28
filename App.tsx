@@ -108,7 +108,20 @@ const AppContent = () => {
               ...prev.history,
               { id: `skip-sys-${Date.now()}`, sender: SenderType.SYSTEM, kind: 'ack', text: "[DEBUG_SKIP]: JUMPING TO NARRATIVE START // STATE_STABILIZED", timestamp: Date.now(), lane: 'SHARED' }
             ],
-            narrative: { ...prev.narrative, isActive: true, currentSceneId: 'SCENE_01_AWAKENING', currentBeatId: 'BEAT_01_ACTIVATION', sharedTruths: IntroEngine.extractTruthsFromPrologue(dummyMessages) }
+            narrative: {
+              ...prev.narrative,
+              isActive: true,
+              currentSceneId: 'SCENE_01_AWAKENING',
+              currentBeatId: 'BEAT_01_ACTIVATION',
+              activeBeats: ['BEAT_01_ACTIVATION'],
+              completedBeats: [],
+              completedScenes: [],
+              eventLog: [],
+              actionHistory: [],
+              marginObservations: [],
+              branchSignals: {},
+              sharedTruths: IntroEngine.extractTruthsFromPrologue(dummyMessages)
+            }
           };
 
           // Execute the first beat to trigger effects (lights/flags) and get initial dialogue

@@ -1,5 +1,5 @@
 
-import { NarrativeState, NarrativeEvent, GameState, Beat, Scene, NarrativeChoice, InteractionReq } from '../types';
+import { NarrativeState, NarrativeEvent, GameState, Beat, Scene, NarrativeChoice, InteractionReq, Biometrics } from '../types';
 import { EventTypes } from '../runtime/events';
 import { SCENES } from '../worldTruth/scenes';
 
@@ -154,7 +154,22 @@ export class Director {
     return SCENES[sceneId]?.beats[beatId] || null;
   }
 
-  public checkEndings(narrative: NarrativeState, biometrics: { drift: number }, worldFlags: Record<string, any>): string | null {
+  public checkEndings(narrative: NarrativeState, biometrics: Biometrics, worldFlags: Record<string, any>): string | null {
+    const now = Date.now();
+    const silenceSignalAt = narrative.branchSignals?.['ETHIC_SILENCE_REASSURANCE'] || 0;
+    const lastEventTs = narrative.eventLog[narrative.eventLog.length - 1]?.timestamp || 0;
+    const silenceWindowMs = now - lastEventTs;
+
+    const identitySupplanted = narrative.worldFlags['IDENTITY_SUPPLANTED'] || worldFlags['IDENTITY_SUPPLANTED'];
+    const identityDissonance = narrative.worldFlags['NAME_GLITCH_DETECTED'] || worldFlags['NAME_GLITCH_DETECTED'];
+    const consensusFracture = biometrics.consensus < 0.5 && biometrics.coherence < 0.65;
+
+    const hasUnresolvedTruths = narrative.sharedTruths.some(t => !t.isVerified && t.confidence >= 0.4);
+    const transactionalLoop = narrative.actionHistory.length >= 6 && biometrics.consensus < 0.45 && biometrics.drift < 0.7;
+    const sustainedSilence = silenceSignalAt > 0 && now - silenceSignalAt > 60_000 && silenceWindowMs > 120_000;
+
+    if (identitySupplanted && identityDissonance && consensusFracture) return "THE_STRANGER";
+    if (sustainedSilence && transactionalLoop && hasUnresolvedTruths) return "THE_REFUSAL";
     if (narrative.completedBeats.includes('BEAT_09_THE_FORBIDDEN_FOLDER')) return "SYMBIOSIS";
     if (biometrics.drift > 0.98) return "FADING_SIGNAL";
     if (worldFlags['HARD_FLUSH_TRIGGERED']) return "TERMINATION";

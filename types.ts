@@ -342,18 +342,19 @@ export interface NarrativeState {
   currentSceneId: string;
   currentBeatId: string;
   inventory: string[];
-  discoveredLore: string[]; 
+  discoveredLore: string[];
   worldFlags: Record<string, any>;
-  objects: Record<string, RuntimeObject>; 
-  eventLog: NarrativeEvent[]; 
-  actionHistory: NarrativeAction[]; 
-  activeBeats: string[]; 
-  completedBeats: string[]; 
+  objects: Record<string, RuntimeObject>;
+  eventLog: NarrativeEvent[];
+  actionHistory: NarrativeAction[];
+  activeBeats: string[];
+  completedBeats: string[];
   completedScenes: string[]; // NEW: Tracks finished scenes for spinal flow
   sharedTruths: SharedTruth[];
   recoveredMemoryIds: string[];
   marginObservations: MarginObs[];
-  beatTimer: number; 
+  beatTimer: number;
+  branchSignals?: Record<string, number>;
 }
 
 export interface GameState {
