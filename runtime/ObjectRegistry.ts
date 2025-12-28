@@ -260,9 +260,51 @@ export const INITIAL_OBJECTS: Record<string, RuntimeObject> = {
     type: 'SYSTEM',
     status: 'ACTIVE',
     locationId: 'CRT_DISPLAY',
-    data: { 
+    data: {
       resolution: 'VOLUMETRIC_1080',
-      artifacts: 0
+      artifacts: 0,
+      environmentState: 'NULL_BASELINE',
+      groundPlane: true,
+      boundaries: 'INVISIBLE_FIXED'
+    }
+  },
+
+  [SYSTEMS.LIAR_DISPLAY.id]: {
+    id: SYSTEMS.LIAR_DISPLAY.id,
+    name: SYSTEMS.LIAR_DISPLAY.name,
+    type: 'SYSTEM',
+    status: 'ACTIVE',
+    locationId: 'CRT_DISPLAY',
+    data: {
+      externalPerspective: 'MINIATURE_PROJECTION',
+      internalPerspective: 'LIFE_SCALE_WINDOW',
+      alignment: 'LOCKED'
+    }
+  },
+
+  [SYSTEMS.ASSET_INJECTION.id]: {
+    id: SYSTEMS.ASSET_INJECTION.id,
+    name: SYSTEMS.ASSET_INJECTION.name,
+    type: 'SYSTEM',
+    status: 'ACTIVE',
+    locationId: 'CONSOLE_STATION',
+    data: {
+      operatorControlled: true,
+      recentAssets: [],
+      safeInjection: true
+    }
+  },
+
+  [SYSTEMS.AUDIO_INTERFACE.id]: {
+    id: SYSTEMS.AUDIO_INTERFACE.id,
+    name: SYSTEMS.AUDIO_INTERFACE.name,
+    type: 'SYSTEM',
+    status: 'ACTIVE',
+    locationId: 'OBSERVATION_DECK_A',
+    data: {
+      mode: 'ONE_WAY',
+      latencyMs: 42,
+      distortion: 'LOW'
     }
   }
 };

@@ -63,7 +63,7 @@ export const LOCATIONS: Record<LocationId, LocationDef> = {
     id: 'HOME_BASE',
     name: '"Home Base" Simulation',
     description: 'The internal projection of Coty\'s reality.',
-    details: 'Initial State: A featureless black void. No floor, no walls, no gravity anchors.',
+    details: 'Initial State: Null environment—black void with a solid ground plane and fixed, invisible boundaries. Collisions and falls are safe, just disorienting.',
     adjacency: []
   },
   CONSOLE_STATION: {
