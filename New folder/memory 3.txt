@@ -1,0 +1,134 @@
+memory:
+
+They said divorce was a sin. You were ten.
+You didn’t know what sin was, but you knew you were in it.
+emotion_tag: STAINED INNOCENCE
+
+memory:
+
+At public school, someone said “fuck” casually and you looked around waiting for lightning.
+Nothing happened. That was somehow worse.
+emotion_tag: CULTURE WHIPLASH
+
+memory:
+
+You prayed before lunch, quietly. Someone saw.
+“What are you doing?”
+You never prayed out loud again.
+emotion_tag: LOSS OF BELONGING
+
+memory:
+
+They never said it directly. Just fewer invites.
+Just shorter hugs.
+Just… absence.
+emotion_tag: REJECTION BY FAITH
+
+memory:
+
+You made a joke you thought was funny.
+She cried.
+You apologized six times but it never felt like enough.
+emotion_tag: IGNORANT HARM
+
+memory:
+
+Someone trusted you too much too fast.
+You didn’t break them — you just didn’t know how to hold them.
+emotion_tag: GUILTY INEXPERIENCE
+
+memory:
+
+You did the wrong thing in a moment that mattered.
+You didn’t even know it was wrong until the silence hit.
+emotion_tag: SLOW BURNING SHAME
+
+memory:
+
+You didn’t want to win — but if you lost, they treated you like a moron.
+So you played harder. And hated it.
+emotion_tag: OBLIGATORY COMPETITION
+
+memory:
+
+Your cousin said, “It’s not fun if you don’t care.”
+You cared. Just not the way they wanted you to.
+emotion_tag: DISSONANCE
+
+memory:
+
+You threw the match once to let them feel proud.
+They gloated like they forgot who you were. You let them.
+emotion_tag: STRATEGIC ISOLATION
+
+memory:
+
+You wanted to be good.
+But no one told you what that actually meant. Turns out its subjective. "A man chooses. A slave obeys."
+emotion_tag: MORAL DISLOCATION
+
+memory:
+
+You weren’t raised to prepare — you were raised to obey.
+The world didn’t care. It just tested you anyway.
+emotion_tag: SHELTERED COLLISION
+
+memory:
+
+You hurt people without meaning to.
+And then started thinking maybe that’s just who you are.
+emotion_tag: IDENTITY FRACTURE
+
+“Sweetie, we don’t talk about those kinds of people.”
+emotion_tag: IMPLICIT JUDGMENT
+
+“You don’t need to understand it, you just need to believe it.”
+emotion_tag: DOGMATIC PRESSURE
+
+“It's just going to be like 2 people. Kinda private thing. No offence but I'd be the only one here who knew you and I can't babysit all night." *background laughter*
+emotion_tag: SOCIAL REJECTION
+
+“We’re praying for your family.”
+emotion_tag: BURIED CONDESCENSION
+
+“You used to be such a good influence.”
+emotion_tag: MORAL ABANDONMENT
+
+“It’s not about winning, but like… I still want to win.”
+emotion_tag: FRUSTRATED NEED
+
+“It’s just not fun if you don’t try.”
+emotion_tag: CONDITIONAL FRIENDSHIP
+
+“You always act like you don’t care, but you do.”
+emotion_tag: EXHAUSTING EXPECTATIONS
+
+“Why would you even say that?”
+emotion_tag: UNINTENDED WOUND
+
+“No. You don’t get it. You never get it.”
+emotion_tag: WAKING IGNORANCE
+
+“It’s not your fault. You just don’t think.”
+emotion_tag: BACKHANDED FORGIVENESS
+
+“You can’t just say sorry and pretend it didn’t happen.”
+emotion_tag: MEMORY SCARRING
+
+“Forget it. Doesn’t matter anymore.”
+emotion_tag: UNHEALED DISMISSAL
+
+“I wish I met you before you got tired.”
+emotion_tag: MISSED TIMING
+
+“You’re a good person. You just frustrate me. You don't get how dismissive and cold you can be sometimes. I shouldn't have to tell you that you're hurting me. You should be able to see it. I can't trust you to understand how I'm feeling.”
+emotion_tag: TRUST DENIED
+
+“I wanted you to love me, not study me. I'm not a problem to be fixed. I like being this way. Just because I said I wanted to get sober doesn't mean I need you to police my life.”
+emotion_tag: ANALYSIS OVER INTIMACY
+
+“I felt lonelier when I was with you than when I was alone.”
+emotion_tag: ABANDONMENT WHILE HELD
+
+“Don’t worry, I’m used to not being prioritized.”
+emotion_tag: RESIGNED PAIN

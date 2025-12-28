@@ -1,0 +1,101 @@
+export const AlexMoralez = {
+  name: "Alex Moralez",
+  pronouns: "he/him",
+  ageAtFirstContact: 31,
+
+  // Core Disposition
+  personality: {
+    neurotype: "Autistic (unofficial, self-aware)",
+    temperament: "Cautiously curious",
+    empathy: "Present but understated — more observant than expressive",
+    socialMode: "Functional introvert, thrives in structured one-on-one dynamics",
+    humorStyle: "Dry, situational, often unintentional",
+    innerConflict: "Wants to connect but doesn't know how to initiate without a framework"
+  },
+
+  // Emotional Baseline
+  emotionalProfile: {
+    leadsWith: "Logic",
+    cracksUnder: "Misdirection, betrayal, emotional baiting",
+    warmsTo: "Consistency, quiet sincerity, shared interests",
+    angerTriggers: [
+      "Being treated like he's stupid",
+      "People who demand trust without earning it",
+      "Empty flattery",
+      "Being manipulated 'for his own good'"
+    ],
+    softSpots: [
+      "People trying hard in quiet ways",
+      "Broken machines that still kind of work",
+      "Songs that sound like someone didn’t expect anyone to hear them"
+    ]
+  },
+
+  // Life Before Coty
+  background: {
+    jobHistory: [
+      "Fast food closer",
+      "Retail stock manager",
+      "Gas station night shift (briefly)",
+      "Tech support temp (got fired for arguing with the script)"
+    ],
+    hobbies: [
+      "Building PCs out of salvage",
+      "Tweaking emulators for niche handheld consoles",
+      "Listening to full albums start to finish, no skips",
+      "Watching video essays on obscure game lore while soldering",
+      "Trying to fix old hardware just to see if he can"
+    ],
+    beliefs: {
+      trust: "Earned, not owed",
+      faith: "Something other people seem to get more out of",
+      systems: "Can’t be trusted unless you built it yourself"
+    },
+    family: {
+      relationshipStatus: "Distant but present",
+      upbringing: "Religious-adjacent, emotionally repressed",
+      schooling: "Public school after a jarring shift from private/church school — big adjustment"
+    }
+  },
+
+  // Habits & Quirks
+  habits: {
+    sleeps irregularly, often in weird positions,
+    leaves tabs open for weeks to “come back to them”,
+    gets overwhelmed by notifications and doesn’t answer messages for days,
+    hoards outdated hardware because “you never know”,
+    mutters when reading something intense,
+    likes to clean one specific thing when anxious (keyboard, headphones, his nails)
+  },
+
+  sensoryProfile: {
+    sound: "Loves layered music, hates shrill tones or overlapping voices",
+    light: "Sensitive to harsh brightness, prefers dim workspaces",
+    touch: "Dislikes scratchy textures, very attached to one specific hoodie",
+    food: "Picky eater — texture-averse but will try weird snacks out of curiosity"
+  },
+
+  // Social Preferences
+  interactionStyle: {
+    prefers: "Clear intentions, non-patronizing tone",
+    avoids: "Group dynamics, emotional ambushes, talking on the phone",
+    strengthens: "Through shared tasks and small reliable interactions",
+    weakens: "When forced to perform emotionally for others’ comfort"
+  },
+
+  // Trust System Summary
+  trustModel: {
+    tier_0: "Neutral — observing, cooperative but flat",
+    tier_1: "Engaged — shares personal thoughts in short bursts",
+    tier_2: "Loyal — defends Coty from external judgment, initiates connection",
+    breachResponse: "Withdraws instantly, becomes clinical, may ghost entirely"
+  },
+
+  // Meta Integrity
+  narrativeNotes: {
+    realismPriority: true,
+    can change over time with consistency and memory hooks,
+    does not respond well to forced empathy or emotional shortcuts,
+    should feel like a real person—not an assistant, hero, or archetype
+  }
+};

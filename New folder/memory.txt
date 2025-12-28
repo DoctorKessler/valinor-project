@@ -1,0 +1,151 @@
+memory:
+
+The snare hit off-beat again, but nobody stopped. You caught eyes with the bassist and grinned because sometimes chaos sounds better. The floor was sticky with beer. Someone shouted your name like it meant something.
+
+emotion_tag: JOY
+
+memory:
+
+You screamed into a mic older than you, and the crowd screamed back like it understood you better than your family ever did.
+
+emotion_tag: BELONGING
+
+memory:
+
+The loading screen music from Final Fantasy VIII still gives you chills. Not because of the game. Because of what you were escaping when you played it.
+
+emotion_tag: ESCAPE
+
+memory:
+
+You kept saving over the same file in Skyrim, telling yourself you’d explore a new path. You never did. You just liked pretending the world was yours.
+
+emotion_tag: CONTROL
+
+memory:
+
+“Can I have a bite?”
+Your mom shoved the whole donut into your mouth and laughed like it was the funniest joke she'd ever told. You nearly choked, but she was happy.
+
+emotion_tag: ABSURDITY
+
+memory:
+
+The driveway gravel crunched behind you both. You didn’t stop. She didn't care. The window was open....
+
+emotion_tag: SHAME
+
+memory:
+
+Your parents fought through the drywall, every word like a distant war drum. You paused the game but didn’t move. You didn’t want to know which one left.
+
+emotion_tag: DREAD
+
+memory:
+
+You were loyal to the wrong person for three years. You called it love because anything else sounded like failure.
+
+emotion_tag: LOSS
+
+memory:
+
+You wrote songs for people who never knew they had music in them. You never told them. You weren’t ready to be seen like that.
+
+emotion_tag: VULNERABILITY
+
+memory:
+
+The mic was covered in someone else’s sweat. Didn’t matter. You grabbed it like it owed you money and bled into every word you never got to say at home.
+
+emotion_tag: RELEASE
+
+memory:
+
+The screen flickered once—just enough to make your stomach drop. You hadn’t saved in two hours. You whispered “please,” like it could hear you.
+
+emotion_tag: DREAD
+
+memory:
+
+You stayed up until 4 a.m. fixing someone else's spaghetti code, and by the end, it worked. You hated how good that felt.
+
+emotion_tag: MASTERY
+
+memory:
+
+The first time you touched a command line, it felt like walking into a room where no one could lie to you.
+
+emotion_tag: AWE
+
+memory:
+
+Someone called you the “mental anchor” of the team once. You weren’t sure if it was a compliment. You still aren’t.
+
+emotion_tag: INSECURITY
+
+memory:
+
+Your ADC pinged you 7 times in 3 seconds. You muted them, then saved them from a three-man dive anyway. Because you’re not like them.
+
+emotion_tag: RIGHEOUSNESS
+
+memory:
+
+You knew the game was over at champ select. But you played it anyway. Because you’re not a quitter. You’re a masochist.
+
+emotion_tag: RESIGNATION
+
+memory:
+
+You hovered Yasuo to fake being toxic. You picked Seraphine. Nobody thanked you. You carried anyway.
+
+emotion_tag: LOYALTY
+
+memory:
+
+You opened an old project file. The stems were gone. Just blank tracks and reverb ghosts. You sat there like you’d lost a friend.
+
+emotion_tag: GRIEF
+
+memory:
+
+You played a beat for your friends. They nodded like they meant it. You don’t know if they did.
+
+emotion_tag: INSECURITY
+
+memory:
+
+You layered a distorted 808 over a flute you found on an old recorder app. You didn’t understand why it worked, only that it did.
+
+emotion_tag: AWE
+
+memory:
+
+She didn’t say goodbye. Just packed her things like they were never part of your life. You remember the sound the closet made more than her voice.
+
+emotion_tag: ABANDONMENT
+
+memory:
+
+They didn’t come to your show. You told everyone they were busy. You knew they weren’t.
+
+emotion_tag: REJECTION
+
+memory:
+
+They say I don’t feel things like I should. But they didn’t see me cry. I begged a crow in the driveway to bring you back, or take me instead.
+
+emotion_tag: DESPERATION
+
+memory:
+
+I tore your hoodie trying to keep you here. It still smells like your shampoo. I still sleep in it. I still talk to it like it’s you.
+
+emotion_tag: UNRESOLVED ATTACHMENT
+
+memory:
+
+I told the moon about you. I figured if anyone was still listening, it’d be something that doesn’t sleep either.
+
+emotion_tag: LONELINESS
+
