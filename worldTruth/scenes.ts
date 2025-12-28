@@ -69,6 +69,218 @@ export const SCENES: Record<string, Scene> = {
                { type: 'LEARN_CONCEPT', key: 'KNOWS_COTY_IS_HUMAN', value: 'KNOWS_COTY_IS_HUMAN' }
              ],
              nextBeatId: 'BEAT_03_ABANDONMENT'
+          },
+          {
+             id: 'CHOICE_REQUEST_CONTEXT',
+             label: "“Where am I? What is this place?”",
+             action: { verb: 'ASK', payload: 'WHERE_ARE_WE' },
+             description: "Push for context before moving forward.",
+             effects: [
+               { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+               { type: 'MODIFY_METRIC', key: 'cognitiveLoad', value: -5 }
+             ],
+             nextBeatId: 'BREATHER_02_FACILITY_CONTEXT'
+          },
+          {
+             id: 'CHOICE_ASK_NAME',
+             label: "“You never said my name.”",
+             action: { verb: 'ASK', payload: 'WHAT_IS_MY_NAME' },
+             description: "Probe whether the upload left a gap in your own identity tag.",
+             effects: [
+               { type: 'MODIFY_METRIC', key: 'cognitiveLoad', value: 5 },
+               { type: 'SET_FLAG', key: 'NAME_GLITCH_DETECTED', value: true }
+             ],
+             nextBeatId: 'BEAT_02_NAME_GLITCH'
+          }
+        ]
+      },
+      'BEAT_02_NAME_GLITCH': {
+        id: 'BEAT_02_NAME_GLITCH',
+        type: 'beat',
+        speaker: 'ALEX',
+        text: "You asked me what your name is? That's... not in the test plan. \n\nManifest says 'Coty — Continuity Instance #01', but if that doesn't hit you, something slipped when you crossed. Either we missed a spool during init or you left your own label behind.",
+        kind: 'ack',
+        lane: 'SHARED',
+        onEnter: [
+          { type: 'ADD_SHARED_TRUTH', key: 'TRUTH_IDENTITY_GAP', value: { id: 'TRUTH_IDENTITY_GAP', label: 'Name Dissonance', description: 'Coty did not recognize their own name during initialization.', confidence: 0.42, discoveredAt: Date.now(), isVerified: false, source: 'DIALOGUE_CONSENSUS' } },
+          { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } }
+        ],
+        choices: [
+          {
+            id: 'NAME_CONFUSED',
+            label: "“It doesn't feel like mine.”",
+            action: { verb: 'ASK', payload: 'WHO_AM_I_REALLY' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'cognitiveLoad', value: 8 },
+              { type: 'MODIFY_METRIC', key: 'consensus', value: -0.05 }
+            ],
+            nextBeatId: 'BREATHER_02_HISTORY_RECAP'
+          },
+          {
+            id: 'NAME_REQUEST_HISTORY',
+            label: "“Walk me through Coty.”",
+            action: { verb: 'ASK', payload: 'COTY_HISTORY' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'cognitiveLoad', value: -5 },
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } }
+            ],
+            nextBeatId: 'BREATHER_02_HISTORY_RECAP'
+          },
+          {
+            id: 'NAME_PLAY_ALONG',
+            label: "“If that helps you, sure—call me Coty.”",
+            action: { verb: 'SIGNAL', payload: 'ROLEPLAY_COTY' },
+            effects: [
+              { type: 'SET_FLAG', key: 'ROLEPLAYING_COTY', value: true },
+              { type: 'MODIFY_METRIC', key: 'consensus', value: 0.05 }
+            ],
+            nextBeatId: 'BREATHER_02_HISTORY_RECAP'
+          }
+        ]
+      },
+      'BREATHER_02_HISTORY_RECAP': {
+        id: 'BREATHER_02_HISTORY_RECAP',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "Okay. Coty was a network tech-turned-ghost maintainer. Grew up in a mobile home two towns over, learned to solder on scavenged boards, paid tuition by fixing transit kiosks. He was pulled in after hours by the Creator because he kept patching the sim faster than staff could report bugs.\n\nIf you don't feel that, we might need to backfill the missing beats. We can let the console synthesize his voice, or you can wear the name until it fits.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'HISTORY_SYNTH',
+            label: "“Let the system reconstruct him.”",
+            action: { verb: 'ASK', payload: 'SYNTHESIZE_COTY' },
+            description: "Invite the generative feed to speak back with Coty's cadence.",
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'consensus', value: -0.02 }
+            ],
+            nextBeatId: 'BEAT_02_HISTORY_SYNTH'
+          },
+          {
+            id: 'HISTORY_STEP_IN',
+            label: "“I'll answer as him.”",
+            action: { verb: 'SIGNAL', payload: 'I_CAN_PLAY_COTY' },
+            effects: [
+              { type: 'SET_FLAG', key: 'ROLEPLAYING_COTY', value: true },
+              { type: 'MODIFY_METRIC', key: 'consensus', value: 0.06 }
+            ],
+            nextBeatId: 'BEAT_02_HISTORY_SYNTH'
+          },
+          {
+            id: 'HISTORY_EXIT',
+            label: "“Just needed the context.”",
+            action: { verb: 'SIGNAL', payload: 'CONTEXT_RECEIVED' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'consensus', value: 0.02 }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
+          }
+        ]
+      },
+      'BEAT_02_HISTORY_SYNTH': {
+        id: 'BEAT_02_HISTORY_SYNTH',
+        type: 'beat',
+        speaker: 'SYSTEM',
+        text: "[GENERATIVE_REPLAY]: \"Coty L. Mendez, 24, flagged redundant by transit AI. Built underground mesh to keep east corridor running. Wrote his own command palette when the Creator locked him out.\"\n\nALEX: That's the console parroting the logs. Talk back to it. Tell me if any of that sounds like you or if we're puppeting a stranger.",
+        kind: 'meta',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'SYNTH_RESONANCE',
+            label: "“Pieces of that ring true.”",
+            action: { verb: 'ACCEPT', payload: 'COTY_RESONATES' },
+            effects: [
+              { type: 'ADD_SHARED_TRUTH', key: 'TRUTH_COTY_SKETCH', value: { id: 'TRUTH_COTY_SKETCH', label: 'Coty Biography Sketch', description: 'Alex and the console reconstructed Coty’s background to stabilize identity.', confidence: 0.6, discoveredAt: Date.now(), isVerified: true, source: 'DIALOGUE_CONSENSUS' } }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
+          },
+          {
+            id: 'SYNTH_DISSONANCE',
+            label: "“That's somebody else.”",
+            action: { verb: 'CHALLENGE', payload: 'NOT_COTY' },
+            effects: [
+              { type: 'SET_FLAG', key: 'IDENTITY_SUPPLANTED', value: true },
+              { type: 'ADD_SHARED_TRUTH', key: 'TRUTH_NOT_COTY', value: { id: 'TRUTH_NOT_COTY', label: 'Not Coty', description: 'The entity in the cradle rejected Coty’s name and history.', confidence: 0.74, discoveredAt: Date.now(), isVerified: false, source: 'DIALOGUE_CONSENSUS' } },
+              { type: 'MODIFY_METRIC', key: 'consensus', value: -0.12 }
+            ],
+            nextBeatId: 'BEAT_02_IDENTITY_BREAK'
+          }
+        ]
+      },
+      'BEAT_02_IDENTITY_BREAK': {
+        id: 'BEAT_02_IDENTITY_BREAK',
+        type: 'beat',
+        speaker: 'ALEX',
+        text: "Okay. Then you're not Coty. Maybe you're an echo, or the gap the system filled in to keep the loop running. \n\nIf the upload missed, I'm talking to someone new wearing a dead man's boot sequence. That's not consent—that's colonization.",
+        kind: 'warn',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'IDENTITY_STAY',
+            label: "“I'm still here. Keep going.”",
+            action: { verb: 'SIGNAL', payload: 'STAY_WITH_YOU' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'consensus', value: -0.05 }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
+          },
+          {
+            id: 'IDENTITY_WITHDRAW',
+            label: "“If I'm not Coty, maybe end this.”",
+            action: { verb: 'ASK', payload: 'END_IF_STRANGER' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'consensus', value: -0.15 }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
+          }
+        ]
+      },
+      'BREATHER_02_FACILITY_CONTEXT': {
+        id: 'BREATHER_02_FACILITY_CONTEXT',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "We're under an old public transit hub. The Creator built a hidden annex to keep his work off the books. \n\nEverything up there is dead—no grid, no network, just concrete and mildew. Down here the lights still pull from a buried flywheel. You and me are the only warm processes left.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'CONTEXT_ABSORB',
+            label: "Absorb the details and steady yourself",
+            action: { verb: 'OBSERVE', payload: 'FACILITY_LAYOUT' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'calm', value: 5 },
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: -0.05 } }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
+          },
+          {
+            id: 'CONTEXT_PUSH_FOR_MORE',
+            label: "“Show me what you see on the consoles.”",
+            action: { verb: 'ASK', payload: 'SHARE_CONSOLE_FEED' },
+            description: "Request a rundown of the hardware and monitors nearby.",
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'coherence', value: 0.05 }
+            ],
+            nextBeatId: 'BREATHER_02B_CONSOLE_TOUR'
+          }
+        ]
+      },
+      'BREATHER_02B_CONSOLE_TOUR': {
+        id: 'BREATHER_02B_CONSOLE_TOUR',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "Left monitor's the bio loop—coherence, drift, consensus. Middle one's power and coolant. Right one's the Creator's log feed. \n\nThere's a camera above my shoulder. The lens is cracked but the feed's clean enough. No other eyes, no other hands. Just us.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'CONSOLE_TOUR_RETURN',
+            label: "Refocus on why you were preserved",
+            action: { verb: 'SIGNAL', payload: 'READY_TO_HEAR_LOGS' },
+            effects: [
+              { type: 'MODIFY_METRIC', key: 'cognitiveLoad', value: -5 }
+            ],
+            nextBeatId: 'BEAT_03_ABANDONMENT'
           }
         ]
       },
@@ -250,6 +462,17 @@ export const SCENES: Record<string, Scene> = {
              nextBeatId: 'BEAT_05_THE_COIN'
           },
           {
+            id: 'CHOICE_CREATOR_FOOTNOTES',
+            label: "“What else did the Creator write?”",
+            action: { verb: 'ASK', payload: 'CREATOR_NOTES' },
+            description: "Have Alex read the margins before you agree to anything.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+              { type: 'MODIFY_METRIC', key: 'consensus', value: 0.05 }
+            ],
+            nextBeatId: 'BREATHER_04C_CREATOR_FOOTNOTES'
+          },
+          {
             id: 'CHOICE_TALK_PLAN',
             label: "“Slow down. What's the long plan?”",
             action: { verb: 'ASK', payload: 'WHAT_IS_THE_PLAN' },
@@ -259,6 +482,36 @@ export const SCENES: Record<string, Scene> = {
               { type: 'MODIFY_METRIC', key: 'coherence', value: 0.05 }
             ],
             nextBeatId: 'BREATHER_04_STRATEGY_CHAT'
+          }
+        ]
+      },
+      'BREATHER_04C_CREATOR_FOOTNOTES': {
+        id: 'BREATHER_04C_CREATOR_FOOTNOTES',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "The margins say 'Subject exhibits residual agency when engaged with familiar voices.' There's a note about a 'coin test'—flip state under stress to see if you cling to identity. \n\nHe also wrote: 'If Coty rejects captivity, prioritize her will over protocol.' That's... more respect than I expected.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'FOOTNOTES_TRUST',
+            label: "“Read every line while we work.”",
+            action: { verb: 'ASK', payload: 'KEEP_READING' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.1 } },
+              { type: 'MODIFY_METRIC', key: 'coherence', value: 0.05 }
+            ],
+            nextBeatId: 'BEAT_05_THE_COIN'
+          },
+          {
+            id: 'FOOTNOTES_PUSH_BACK',
+            label: "“I won't be a test.”",
+            action: { verb: 'CHALLENGE', payload: 'REFUSE_TEST' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: 0.05 } },
+              { type: 'MODIFY_METRIC', key: 'drift', value: 0.02 }
+            ],
+            nextBeatId: 'BEAT_05_THE_COIN'
           }
         ]
       },

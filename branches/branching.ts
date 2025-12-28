@@ -100,6 +100,18 @@ const ETHICAL_PROBES: BranchProbe[] = [
       if (!(silenceWindow && trustGap)) return null;
       return '[ETHIC_DRIFT]: Silence vs Reassurance. Inaction is reading as neglect while reassurance feels hollow.';
     }
+  },
+  {
+    id: 'ETHIC_IDENTITY_CONTINUITY',
+    label: 'Identity vs Continuity',
+    kind: 'meta',
+    check: state => {
+      const nameGlitch = state.world.flags['NAME_GLITCH_DETECTED'];
+      const supplanted = state.world.flags['IDENTITY_SUPPLANTED'];
+      const weakConsensus = state.biometrics.consensus < 0.55;
+      if (!(nameGlitch && (supplanted || weakConsensus))) return null;
+      return '[ETHIC_DRIFT]: Identity vs Continuity. Self-label failed to load; the occupant may not be the preserved Coty.';
+    }
   }
 ];
 
