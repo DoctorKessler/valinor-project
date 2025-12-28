@@ -4,7 +4,7 @@ import { GameState, SenderType, TerminalMessage, NarrativeEvent, SharedTruth } f
 import { GameEngine } from '../engine/GameEngine';
 import { NarrativeSystem } from '../engine/NarrativeSystem';
 import { NarrativeEventFactory, EventTypes } from '../runtime/events';
-import { getFinderReaction } from '../services/geminiService';
+import { getFinderReaction } from '../geminiService';
 import { COTY_MEMORIES } from '../worldTruth/memories';
 import { audioSystem } from '../audio/AudioSystem';
 import { SCENES } from '../worldTruth/scenes';
