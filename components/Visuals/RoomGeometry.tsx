@@ -14,10 +14,10 @@ interface Props {
  */
 export const RoomGeometry: React.FC<Props> = ({ labLightsOn, flashlightOn, isCrisp, power }) => {
   // Wireframe visibility tuning
-  const wireframeOpacity = isCrisp 
+  const wireframeOpacity = isCrisp
     ? (labLightsOn ? 0.6 : (flashlightOn ? 0.4 : 0.2))
     : (labLightsOn ? 0.3 : (flashlightOn ? 0.15 : 0.08));
-    
+
   const featherExtent = labLightsOn ? '100%' : (flashlightOn ? '90%' : '70%');
   const color = "16, 185, 129"; // Emerald 500
 
@@ -46,6 +46,128 @@ export const RoomGeometry: React.FC<Props> = ({ labLightsOn, flashlightOn, isCri
             rotateY(calc(var(--cam-angle) * -0.35deg))
             rotateX(calc((var(--cam-z) - 0.5) * 7deg));
           transition: transform 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .room-scaffold {
+          position: absolute;
+          inset: 0;
+          transform-style: preserve-3d;
+          pointer-events: none;
+          opacity: ${wireframeOpacity * 1.4};
+          filter: drop-shadow(0 0 12px rgba(${color}, ${wireframeOpacity * 0.35}));
+        }
+
+        .frame-rail {
+          position: absolute;
+          background: linear-gradient(
+            to right,
+            rgba(${color}, 0) 0%,
+            rgba(${color}, ${wireframeOpacity * 0.6}) 30%,
+            rgba(${color}, ${wireframeOpacity * 0.8}) 70%,
+            rgba(${color}, 0) 100%
+          );
+          border: 1px solid rgba(${color}, ${wireframeOpacity * 0.6});
+          transform-origin: center;
+        }
+
+        .frame-rail.floor {
+          width: 5200px;
+          height: 12px;
+          bottom: -60px;
+          left: -600px;
+          transform: translateZ(-2900px) translateX(calc(var(--cam-x) * 60px));
+        }
+
+        .frame-rail.ceiling {
+          width: 5200px;
+          height: 10px;
+          top: -420px;
+          left: -600px;
+          transform: translateZ(-2800px) translateX(calc(var(--cam-x) * 60px));
+        }
+
+        .frame-rail.vertical {
+          width: 10px;
+          height: 2400px;
+          top: -400px;
+          transform: translateZ(-2900px) translateX(calc(var(--cam-x) * 60px));
+          background: linear-gradient(
+            to bottom,
+            rgba(${color}, 0) 0%,
+            rgba(${color}, ${wireframeOpacity * 0.6}) 20%,
+            rgba(${color}, ${wireframeOpacity * 0.9}) 80%,
+            rgba(${color}, 0) 100%
+          );
+        }
+
+        .frame-rail.vertical.left { left: -600px; }
+        .frame-rail.vertical.right { left: 4600px; }
+
+        .ceiling-strut {
+          position: absolute;
+          top: -320px;
+          left: -400px;
+          width: 4800px;
+          height: 2px;
+          background: rgba(${color}, ${wireframeOpacity * 0.55});
+          transform-origin: left;
+          transform: translateZ(-2200px) rotateY(12deg);
+          box-shadow: 0 0 16px rgba(${color}, ${wireframeOpacity * 0.45});
+        }
+
+        .ceiling-strut.secondary {
+          transform: translateZ(-1800px) rotateY(-9deg);
+          opacity: 0.75;
+        }
+
+        .floor-anchor {
+          position: absolute;
+          bottom: -40px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 1px solid rgba(${color}, ${wireframeOpacity * 0.8});
+          box-shadow:
+            inset 0 0 12px rgba(${color}, ${wireframeOpacity * 0.5}),
+            0 0 20px rgba(${color}, ${wireframeOpacity * 0.2});
+          background: radial-gradient(circle,
+            rgba(${color}, ${wireframeOpacity}) 0%,
+            rgba(${color}, ${wireframeOpacity * 0.3}) 65%,
+            rgba(${color}, 0) 100%
+          );
+          transform: translateZ(-2950px) translateX(calc(var(--cam-x) * 50px));
+        }
+
+        .floor-anchor::after {
+          content: '';
+          position: absolute;
+          inset: 8px;
+          border: 1px dashed rgba(${color}, ${wireframeOpacity * 0.8});
+          border-radius: 50%;
+          opacity: 0.7;
+        }
+
+        .floor-anchor.small {
+          width: 26px;
+          height: 26px;
+          opacity: 0.7;
+        }
+
+        .depth-marker {
+          position: absolute;
+          bottom: 260px;
+          left: 50%;
+          width: 1px;
+          height: 800px;
+          background: linear-gradient(
+            to top,
+            rgba(${color}, 0),
+            rgba(${color}, ${wireframeOpacity * 0.8}) 40%,
+            rgba(${color}, 0)
+          );
+          transform-origin: bottom;
+          transform: translateX(-50%) rotateX(86deg) translateZ(-2600px);
+          opacity: 0.45;
         }
 
         .lab-surface {
@@ -237,7 +359,20 @@ export const RoomGeometry: React.FC<Props> = ({ labLightsOn, flashlightOn, isCri
       <div className="room-viewport">
         <div className="room-box">
           <div className="overhead-cone" />
-          
+
+          <div className="room-scaffold">
+            <div className="frame-rail floor" />
+            <div className="frame-rail ceiling" />
+            <div className="frame-rail vertical left" />
+            <div className="frame-rail vertical right" />
+            <div className="ceiling-strut" />
+            <div className="ceiling-strut secondary" />
+            <div className="depth-marker" />
+            <div className="floor-anchor" style={{ left: '18%' }} />
+            <div className="floor-anchor small" style={{ left: '48%' }} />
+            <div className="floor-anchor" style={{ left: '78%' }} />
+          </div>
+
           <div className="lab-surface wall-back">
             <div className="grid-pattern" />
             <div className="door-outline" />

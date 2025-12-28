@@ -9,6 +9,35 @@ import { SpatialEngine } from './SpatialEngine';
 export class NarrativeSystem {
   private static director = new Director();
 
+  private static markSceneComplete(state: GameState, sceneId: string) {
+    if (!state.narrative.completedScenes.includes(sceneId)) {
+      state.narrative.completedScenes.push(sceneId);
+    }
+  }
+
+  private static enterScene(state: GameState, sceneId: string, messages: Partial<TerminalMessage>[], metaText?: string): GameState {
+    const scene = SCENES[sceneId];
+    if (!scene) return state;
+
+    state.narrative.currentSceneId = scene.id;
+    state.narrative.currentBeatId = scene.initialBeatId;
+    state.narrative.currentLocation = scene.locationId;
+
+    if (metaText) {
+      messages.push({
+        sender: SenderType.SYSTEM,
+        kind: 'meta',
+        lane: 'SHARED',
+        text: metaText,
+        timestamp: Date.now()
+      });
+    }
+
+    const result = this.runBeat(state, scene.initialBeatId);
+    messages.push(...result.messages);
+    return result.newState;
+  }
+
   static checkEndings(state: GameState): string | null {
     if (state.world.flags['HOPE_ALIVE']) return "HOPE_ALIVE";
     return this.director.checkEndings(state.narrative, state.biometrics, state.world.flags);
@@ -71,9 +100,18 @@ export class NarrativeSystem {
 
     newState.narrative.currentBeatId = beatId;
     newState.narrative.beatTimer = beat.delay || 0;
+    newState.narrative.activeBeats = [beatId];
+
+    const previousSceneId = scene.id;
 
     if (beat.onEnter) {
       beat.onEnter.forEach(eff => this.applyEffect(newState, eff));
+    }
+
+    if (newState.narrative.currentSceneId !== previousSceneId) {
+      const metaText = `[SEQUENCE_UPDATE]: Loading Scene ${newState.narrative.currentSceneId}...`;
+      const transitionedState = this.enterScene(newState, newState.narrative.currentSceneId, messages, metaText);
+      return { newState: transitionedState, messages };
     }
 
     if (beat.text) {
@@ -101,6 +139,7 @@ export class NarrativeSystem {
   static resolveChoice(state: GameState, choiceId: string, text?: string): { newState: GameState, messages: Partial<TerminalMessage>[] } {
     let newState: GameState = JSON.parse(JSON.stringify(state));
     const messages: Partial<TerminalMessage>[] = [];
+    const previousSceneId = newState.narrative.currentSceneId;
 
     const scene = SCENES[newState.narrative.currentSceneId];
     if (!scene) return { newState, messages };
@@ -177,6 +216,12 @@ export class NarrativeSystem {
         const result = this.runBeat(newState, choice.nextBeatId);
         newState = result.newState;
         messages.push(...result.messages);
+    }
+
+    if (newState.narrative.currentSceneId !== previousSceneId) {
+        this.markSceneComplete(newState, previousSceneId);
+        const metaText = `[SEQUENCE_UPDATE]: Loading Scene ${newState.narrative.currentSceneId}...`;
+        newState = this.enterScene(newState, newState.narrative.currentSceneId, messages, metaText);
     }
 
     // Check for spinal scene transitions after choice logic
@@ -319,6 +364,17 @@ export class NarrativeSystem {
     const actionResult = this.handleFinderAction(newState, aiResponse.attemptedAction);
     const midState = actionResult.newState;
 
+    if (actionResult.output.length > 0) {
+       actionResult.output.forEach(text => {
+         sharedMessages.push({
+            sender: SenderType.SYSTEM,
+            kind: 'action',
+            lane: 'SHARED',
+            text
+         });
+       });
+    }
+
     if (aiResponse.attemptedAction.immediateEffect) {
        Object.entries(aiResponse.attemptedAction.immediateEffect).forEach(([k, v]) => {
          midState.world.flags[k] = v;
@@ -365,6 +421,7 @@ export class NarrativeSystem {
     }
 
     let lastEvent: NarrativeEvent | undefined = undefined;
+    const startingSceneId = midState.narrative.currentSceneId;
     if (aiResponse.attemptedAction.type === 'INTERACT' && aiResponse.attemptedAction.target) {
       const targetId = aiResponse.attemptedAction.target;
       const interactable = INTERACTABLES[targetId];
@@ -372,11 +429,16 @@ export class NarrativeSystem {
 
       if (verbId) {
         const result = this.resolveInteraction(midState, targetId, verbId);
-        midState.narrative = result.newState.narrative;
-        midState.world = result.newState.world;
+        midState = result.newState;
         lastEvent = result.event || undefined;
         sharedMessages.push({ sender: SenderType.SYSTEM, kind: 'action', lane: 'SHARED', text: result.output });
       }
+    }
+
+    if (midState.narrative.currentSceneId !== startingSceneId) {
+      this.markSceneComplete(midState, startingSceneId);
+      const metaText = `[SEQUENCE_UPDATE]: Loading Scene ${midState.narrative.currentSceneId}...`;
+      midState = this.enterScene(midState, midState.narrative.currentSceneId, sharedMessages, metaText);
     }
 
     const profileUpdate = this.updateFinderProfile(midState, aiResponse, lastEvent);
@@ -406,26 +468,9 @@ export class NarrativeSystem {
   private static checkAndExecuteSceneTransition(state: GameState, messages: Partial<TerminalMessage>[]): GameState {
       const transition = this.director.handleAutoSceneTransition(state);
       if (transition) {
-          // Mark old scene complete
-          if (!state.narrative.completedScenes.includes(state.narrative.currentSceneId)) {
-              state.narrative.completedScenes.push(state.narrative.currentSceneId);
-          }
-
-          // Execute transition
-          state.narrative.currentSceneId = transition.nextSceneId;
-          state.narrative.currentBeatId = transition.nextBeatId;
-          
-          // Initial beat of new scene
-          const result = this.runBeat(state, transition.nextBeatId);
-          messages.push({
-              sender: SenderType.SYSTEM,
-              kind: 'meta',
-              lane: 'SHARED',
-              text: `[SEQUENCE_UPDATE]: Loading Scene ${transition.nextSceneId}...`,
-              timestamp: Date.now()
-          });
-          messages.push(...result.messages);
-          return result.newState;
+          this.markSceneComplete(state, state.narrative.currentSceneId);
+          const metaText = `[SEQUENCE_UPDATE]: Loading Scene ${transition.nextSceneId}...`;
+          return this.enterScene(state, transition.nextSceneId, messages, metaText);
       }
       return state;
   }
@@ -574,11 +619,12 @@ export class NarrativeSystem {
         if (effect.key === 'isRemoteViewActive') state.world.isRemoteViewActive = !!effect.value;
         break;
       case 'TRANSITION_SCENE':
-        if (!state.narrative.completedScenes.includes(state.narrative.currentSceneId)) {
-            state.narrative.completedScenes.push(state.narrative.currentSceneId);
+        if (SCENES[effect.value]) {
+            this.markSceneComplete(state, state.narrative.currentSceneId);
+            state.narrative.currentSceneId = effect.value;
+            state.narrative.currentBeatId = SCENES[effect.value].initialBeatId;
+            state.narrative.currentLocation = SCENES[effect.value].locationId;
         }
-        state.narrative.currentSceneId = effect.value;
-        state.narrative.currentBeatId = SCENES[effect.value].initialBeatId;
         break;
       case 'ADD_SHARED_TRUTH':
         const truth = effect.value as SharedTruth;
