@@ -126,6 +126,7 @@ export const INITIAL_GAME_STATE: GameState = {
     sharedTruths: [],
     recoveredMemoryIds: [],
     marginObservations: [],
-    beatTimer: 0
+    beatTimer: 0,
+    branchSignals: {}
   }
 };

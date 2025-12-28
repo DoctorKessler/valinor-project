@@ -5,6 +5,7 @@ import { INTERACTABLES } from '../worldTruth/interactables';
 import { NarrativeEventFactory, EventTypes } from '../runtime/events';
 import { SCENES } from '../worldTruth/scenes';
 import { SpatialEngine } from './SpatialEngine';
+import { evaluateBranchSignals } from '../branches/branching';
 
 export class NarrativeSystem {
   private static director = new Director();
@@ -458,6 +459,13 @@ export class NarrativeSystem {
 
     // Check for spinal scene transitions after AI turn
     newState = this.checkAndExecuteSceneTransition(midState, sharedMessages);
+
+    // Surface branch pressure and catastrophic drift based on narrative design docs
+    const branchSignals = evaluateBranchSignals(newState);
+    if (branchSignals.messages.length > 0) {
+      sharedMessages.push(...branchSignals.messages);
+    }
+    newState.narrative.branchSignals = branchSignals.updatedSignals;
 
     return { newState, sharedMessages, cotyPrivate, alexPrivate };
   }
