@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GameState, AIResponse, AllowedAction, RuntimeObject } from "./types";
+import { GameState, AIResponse, RuntimeObject } from "./types";
 import { SYSTEM_PROMPT } from "./config/prompts";
 import { NarrativeSystem } from "./engine/NarrativeSystem";
 import { DEVICES } from "./worldTruth/devices";
@@ -24,6 +24,7 @@ export async function getFinderReaction(
   playerInput: string
 ): Promise<AIResponse> {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const model = ai.getGenerativeModel({ model: "gemini-3.0-pro-exp-01-21" });
   
   const disposition = gameState.finder.disposition;
   const trustTier = disposition.trust < 0.3 ? "Tier 0 (Skeptical/Neutral)" : disposition.trust < 0.7 ? "Tier 1 (Engaged/Curious)" : "Tier 2 (Loyal/Protective)";
@@ -140,11 +141,18 @@ ${gameState.history.slice(-6).map(m => `${m.sender}: ${m.text}`).join('\n')}
 `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
-      contents: context,
-      config: {
-        systemInstruction: SYSTEM_PROMPT,
+    const response = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: context }]
+        }
+      ],
+      systemInstruction: {
+        role: "system",
+        parts: [{ text: SYSTEM_PROMPT }]
+      },
+      generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -158,7 +166,7 @@ ${gameState.history.slice(-6).map(m => `${m.sender}: ${m.text}`).join('\n')}
                 type: { type: Type.STRING },
                 target: { type: Type.STRING },
                 rationale: { type: Type.STRING },
-                immediateEffect: { 
+                immediateEffect: {
                   type: Type.OBJECT,
                   description: "Direct world state changes triggered by this action.",
                   properties: {
@@ -187,7 +195,7 @@ ${gameState.history.slice(-6).map(m => `${m.sender}: ${m.text}`).join('\n')}
                 unlockMenu: { type: Type.STRING },
                 label: { type: Type.STRING },
                 key: { type: Type.STRING },
-                worldPatch: { 
+                worldPatch: {
                   type: Type.OBJECT,
                   description: "A map of world state flags to update.",
                   properties: {
@@ -211,10 +219,16 @@ ${gameState.history.slice(-6).map(m => `${m.sender}: ${m.text}`).join('\n')}
           },
           required: ["finderText", "internalDiagnostic", "biometricHints", "attemptedAction", "detectedEmotions"]
         }
-      },
+      }
     });
 
-    return JSON.parse(response.text.trim()) as AIResponse;
+    const text = response.response.text();
+
+    if (!text) {
+      throw new Error("Empty response from Gemini");
+    }
+
+    return JSON.parse(text.trim()) as AIResponse;
   } catch (error) {
     console.error("Perception Failure:", error);
     return {

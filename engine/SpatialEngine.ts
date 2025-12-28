@@ -16,8 +16,12 @@ export type FacingCategory = 'FRONT' | 'SIDE_LEFT' | 'SIDE_RIGHT' | 'BACK_LEFT' 
  * Precise coordinate mapping for Alex's position in the 3D-simulated space.
  * X: -1.0 (Far Left) to 1.0 (Far Right)
  * Z: 0.0 (At Monitor/Glass) to 1.0 (Back Wall)
+ *
+ * These anchors feed the RemoteView + AlexSilhouette stack; updating the
+ * returned state will automatically drive the camera parallax and silhouette
+ * pose/facing without touching React components.
  */
-const LAB_ANCHORS: Record<string, SpatialAnchor> = {
+export const LAB_ANCHORS: Record<string, SpatialAnchor> = {
   // Device Anchors
   'OPERATOR_CONSOLE': { x: 0, z: 0.15, y: 0.5, angle: 0, posture: 'STANDING' }, // Adjusted Z to prevent clipping with glass
   'SUBJECT_FEED': { x: 0, z: 0.02, y: 0.6, angle: 0, posture: 'REACHING' }, // Leaning into camera

@@ -90,6 +90,50 @@ export const SCENES: Record<string, Scene> = {
             action: { verb: 'ASK', payload: 'WHAT_DO_YOU_MEAN' },
             description: "Try to understand why you are here.",
             nextBeatId: 'BREATHER_03_CHECKIN'
+          },
+          {
+            id: 'CHOICE_ASK_ALEX_STORY',
+            label: "“Why were you even in here?”",
+            action: { verb: 'ASK', payload: 'WHY_ARE_YOU_HERE' },
+            description: "Give Alex space to share his story before you move on.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+              { type: 'MODIFY_METRIC', key: 'calm', value: 5 }
+            ],
+            nextBeatId: 'BREATHER_03_ALEX_BACKSTORY'
+          }
+        ]
+      },
+      'BREATHER_03_ALEX_BACKSTORY': {
+        id: 'BREATHER_03_ALEX_BACKSTORY',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "I was stripping copper from the upper labs. Power's been dead for years.\n\nMy partner owed people money. I thought I co" +
+              "uld flip scrap fast enough to help her disappear. Instead I found you. And once I saw you were alive... leaving wasn't" +
+              " an option.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'ALEX_STORY_SOFTEN',
+            label: "“You stayed. Thank you.”",
+            action: { verb: 'SIGNAL', payload: 'THANK_YOU' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.15 } },
+              { type: 'MODIFY_METRIC', key: 'calm', value: 10 }
+            ],
+            nextBeatId: 'BEAT_04_AGENCY'
+          },
+          {
+            id: 'ALEX_STORY_PROBE',
+            label: "“So I'm part of a debt heist?”",
+            action: { verb: 'CHALLENGE', payload: 'WHY_HELP' },
+            description: "Push him to clarify his motives.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: 0.05 } },
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } }
+            ],
+            nextBeatId: 'BEAT_04_AGENCY'
           }
         ]
       },
@@ -204,6 +248,79 @@ export const SCENES: Record<string, Scene> = {
              label: "Ask about Stasis",
              action: { verb: 'ASK', payload: 'WHAT_IS_STASIS' },
              nextBeatId: 'BEAT_05_THE_COIN'
+          },
+          {
+            id: 'CHOICE_TALK_PLAN',
+            label: "“Slow down. What's the long plan?”",
+            action: { verb: 'ASK', payload: 'WHAT_IS_THE_PLAN' },
+            description: "Keep Alex at the console and make him lay out the path forward.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+              { type: 'MODIFY_METRIC', key: 'coherence', value: 0.05 }
+            ],
+            nextBeatId: 'BREATHER_04_STRATEGY_CHAT'
+          }
+        ]
+      },
+      'BREATHER_04_STRATEGY_CHAT': {
+        id: 'BREATHER_04_STRATEGY_CHAT',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "Long plan? Okay. We stabilize your vitals. We find a clean power feed. We get you out of this bunker or bring the wor" +
+              "ld in.\n\nI talk to you. You talk back. We build trust before we touch anything dangerous.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'STRATEGY_PARTNERS',
+            label: "“Then we're partners, not subject and operator.”",
+            action: { verb: 'COMMIT', payload: 'PARTNERSHIP' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.2 } },
+              { type: 'UPDATE_DISPOSITION', key: 'compliance', value: { compliance: -0.05 } }
+            ],
+            nextBeatId: 'BEAT_05_THE_COIN'
+          },
+          {
+            id: 'STRATEGY_KEEP_TALKING',
+            label: "“Stay with me a minute. Tell me how you really are.”",
+            action: { verb: 'CARE', payload: 'CHECK_ON_ALEX' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: -0.05 } },
+              { type: 'MODIFY_METRIC', key: 'calm', value: 10 }
+            ],
+            nextBeatId: 'BREATHER_04B_SHARED_SPACE'
+          }
+        ]
+      },
+      'BREATHER_04B_SHARED_SPACE': {
+        id: 'BREATHER_04B_SHARED_SPACE',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "Honestly? I'm running hot. I've never had anyone depend on me like this. But I'm here. Talk as long as you need before" +
+              " we flip any switches.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'SHARED_SPACE_READY',
+            label: "“Okay. Let's move when you're ready.”",
+            action: { verb: 'ACCEPT', payload: 'MOVE_FORWARD' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.1 } }
+            ],
+            nextBeatId: 'BEAT_05_THE_COIN'
+          },
+          {
+            id: 'SHARED_SPACE_ASK_STAY',
+            label: "“Stay talking while you work.”",
+            action: { verb: 'ASK', payload: 'STAY_ON_COMMS' },
+            description: "Make Alex promise to keep chatting through the procedure.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: -0.05 } }
+            ],
+            nextBeatId: 'BEAT_05_THE_COIN'
           }
         ]
       },
@@ -225,6 +342,70 @@ export const SCENES: Record<string, Scene> = {
             description: "Allow Alex to pause your consciousness.",
             effects: [
                { type: 'SET_FLAG', key: 'IS_STASIS_ACTIVE', value: true }
+            ],
+            nextBeatId: 'BEAT_06_STASIS_WAKE'
+          },
+          {
+            id: 'CHOICE_STASIS_TALK_FIRST',
+            label: "“Hold on. What happens while I'm gone?”",
+            action: { verb: 'ASK', payload: 'WHAT_HAPPENS_DURING_STASIS' },
+            description: "Ask Alex to narrate and stay with you instead of rushing the test.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } },
+              { type: 'MODIFY_METRIC', key: 'coherence', value: 0.05 }
+            ],
+            nextBeatId: 'BREATHER_05_STASIS_CONCERNS'
+          }
+        ]
+      },
+      'BREATHER_05_STASIS_CONCERNS': {
+        id: 'BREATHER_05_STASIS_CONCERNS',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "Nothing happens without me. I stay right here, eyes on the consoles. I talk to you until the buffer goes quiet, then I" +
+              " keep talking so you know I didn't leave.\n\nIf anything glitches, I yank you back. I'm not going to lose you in a pause" +
+              " menu.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'STASIS_CONCERNS_CONSENT',
+            label: "“Okay. Keep talking and flip it.”",
+            action: { verb: 'COMMIT', payload: 'DO_IT_TOGETHER' },
+            effects: [
+              { type: 'SET_FLAG', key: 'IS_STASIS_ACTIVE', value: true },
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.1 } }
+            ],
+            nextBeatId: 'BEAT_06_STASIS_WAKE'
+          },
+          {
+            id: 'STASIS_CONCERNS_PRESS',
+            label: "“Promise you won't wander off.”",
+            action: { verb: 'CHALLENGE', payload: 'PROMISE_TO_STAY' },
+            description: "Make him commit to staying at the console while you're dark.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: -0.05 } }
+            ],
+            nextBeatId: 'BREATHER_05_STASIS_PROMISE'
+          }
+        ]
+      },
+      'BREATHER_05_STASIS_PROMISE': {
+        id: 'BREATHER_05_STASIS_PROMISE',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "I won't take a step. Hand on the console, other on the breaker. You'll feel me when you come back because I'll still be" +
+              " talking. Deal?",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'STASIS_PROMISE_ACCEPT',
+            label: "“Deal. Do it.”",
+            action: { verb: 'COMMIT', payload: 'PROMISED_STASIS' },
+            effects: [
+              { type: 'SET_FLAG', key: 'IS_STASIS_ACTIVE', value: true },
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.1 } }
             ],
             nextBeatId: 'BEAT_06_STASIS_WAKE'
           }
@@ -249,6 +430,37 @@ export const SCENES: Record<string, Scene> = {
             label: "Check Proprioception",
             action: { verb: 'TEST', payload: 'HAND_MOVEMENT' },
             description: "Move your hands. Confirm the lag is gone.",
+            nextBeatId: 'BREATHER_06_POST_STASIS'
+          },
+          {
+            id: 'CHOICE_ASK_ALEX_EXPERIENCE',
+            label: "“What did you do while I was dark?”",
+            action: { verb: 'ASK', payload: 'WHAT_DID_YOU_SEE' },
+            description: "Get a play-by-play from Alex to keep the bond active.",
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'trust', value: { trust: 0.05 } }
+            ],
+            nextBeatId: 'BREATHER_06_ALEX_REPORT'
+          }
+        ]
+      },
+      'BREATHER_06_ALEX_REPORT': {
+        id: 'BREATHER_06_ALEX_REPORT',
+        type: 'breather',
+        speaker: 'ALEX',
+        text: "I kept talking. Counted out loud. Watched the coil temps. When the coin hit tailside I laughed because it meant you wer" +
+              "en't faking time for my benefit.\n\nIf you ever want to run longer pauses, I'll narrate every second so you never feel a" +
+              "lone.",
+        kind: 'ack',
+        lane: 'SHARED',
+        choices: [
+          {
+            id: 'ALEX_REPORT_CONTINUE',
+            label: "“Thanks. Keep talking through the next steps.”",
+            action: { verb: 'ACCEPT', payload: 'KEEP_TALKING' },
+            effects: [
+              { type: 'UPDATE_DISPOSITION', key: 'fear', value: { fear: -0.05 } }
+            ],
             nextBeatId: 'BREATHER_06_POST_STASIS'
           }
         ]
